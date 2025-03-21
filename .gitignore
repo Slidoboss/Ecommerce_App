@@ -35,6 +35,7 @@ migrate_working_dir/
 /windows/
 /macos/
 /linux/
+/lib/core/config/firebase.env
 
 # Symbolication related
 app.*.symbols
@@ -47,3 +48,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 *.env
+
