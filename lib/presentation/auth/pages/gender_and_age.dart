@@ -144,7 +144,7 @@ class GenderAndAgePage extends StatelessWidget {
             onTap: () {
               AppBottomsheet.display(
                 context,
-                MultiBlocProvider(//My inference for this additional mutlibloc provider is that Ages() is treated as another screen wrapped in another screen.
+                MultiBlocProvider(//My inference for this additional mutlibloc provider is that AppBottomSheet is treated as another screen.
                   providers: [
                     BlocProvider.value(value: context.read<AgeSelectionCubit>()),
                     BlocProvider.value(value: context.read<AgesDisplayCubit>()..displayAges()),
