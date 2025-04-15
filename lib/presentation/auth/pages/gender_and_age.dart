@@ -1,7 +1,9 @@
+import 'package:ecommerce_app/common/bloc/button/button_state_cubit.dart';
 import 'package:ecommerce_app/common/helper/bottomsheet/app_bottomsheet.dart';
 import 'package:ecommerce_app/common/widgets/appbar/app_bar.dart';
-import 'package:ecommerce_app/common/widgets/button/basic_app_button.dart';
+import 'package:ecommerce_app/common/widgets/button/basic_reactive_button.dart';
 import 'package:ecommerce_app/data/auth/models/new_user_request.dart';
+import 'package:ecommerce_app/domain/auth/usecases/signup.dart';
 import 'package:ecommerce_app/presentation/auth/bloc/age_selection_cubit.dart';
 import 'package:ecommerce_app/presentation/auth/bloc/ages_display_cubit.dart';
 import 'package:ecommerce_app/presentation/auth/bloc/gender_selection_cubit.dart';
@@ -23,6 +25,7 @@ class GenderAndAgePage extends StatelessWidget {
             BlocProvider(create: (context) => GenderSelectionCubit()),
             BlocProvider(create: (context) => AgeSelectionCubit()),
             BlocProvider(create: (context) => AgesDisplayCubit()),
+            BlocProvider(create: (context) => ButtonStateCubit()),
           ],
           child: Column(
             children: [
@@ -144,10 +147,13 @@ class GenderAndAgePage extends StatelessWidget {
             onTap: () {
               AppBottomsheet.display(
                 context,
-                MultiBlocProvider(//My inference for this additional mutlibloc provider is that AppBottomSheet is treated as another screen.
+                MultiBlocProvider(
+                  //My inference for this additional mutlibloc provider is that AppBottomSheet is treated as another screen.
                   providers: [
-                    BlocProvider.value(value: context.read<AgeSelectionCubit>()),
-                    BlocProvider.value(value: context.read<AgesDisplayCubit>()..displayAges()),
+                    BlocProvider.value(
+                        value: context.read<AgeSelectionCubit>()),
+                    BlocProvider.value(
+                        value: context.read<AgesDisplayCubit>()..displayAges()),
                   ],
                   child: const Ages(),
                 ),
@@ -178,23 +184,33 @@ class GenderAndAgePage extends StatelessWidget {
       ],
     );
   }
-}
 
-Widget _submitButton(BuildContext context) {
-  return Container(
-      height: 100,
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 28),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(38),
-            topRight: Radius.circular(38),
-          )),
-      child: Center(
-        child: BasicAppButton(
-          onPressed: () {},
-          title: 'Submit',
-        ),
-      ));
+  Widget _submitButton(BuildContext context) {
+    return Container(
+        height: 100,
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 28),
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(38),
+              topRight: Radius.circular(38),
+            )),
+        child: Center(
+          child: Builder(
+            builder: (context) {
+              return BasicReactiveButton(
+                onPressed: () {
+                  newUserRequest.gender = context.read<GenderSelectionCubit>().selectedIndex;
+                  newUserRequest.age = context.read<AgeSelectionCubit>().selectedAge;
+                  context
+                      .read<ButtonStateCubit>()
+                      .execute(newUserRequest, SignupUsecase());
+                },
+                title: 'Submit',
+              );
+            }
+          ),
+        ));
+  }
 }
