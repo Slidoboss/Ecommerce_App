@@ -14,6 +14,6 @@ class NewUserRequest {
   final String password;
   final String? address;
   final int? phonenumber; 
-  final int? gender;
-  final int? age;
+  int? gender;
+  String? age;
 }
