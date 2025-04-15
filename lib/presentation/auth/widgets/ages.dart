@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app/presentation/auth/bloc/age_selection_cubit.dart';
 import 'package:ecommerce_app/presentation/auth/bloc/ages_display_cubit.dart';
 import 'package:ecommerce_app/presentation/auth/bloc/ages_display_states.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +10,18 @@ class Ages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.40,
       child: BlocBuilder<AgesDisplayCubit, AgesDisplayState>(
         builder: (context, state) {
           switch (state) {
             case AgesLoading():
               return Center(child: CircularProgressIndicator());
             case AgesLoaded():
-              return _ages(state.ages);
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: _ages(state.ages),
+              );
             case AgesLoadFailure():
               return Center(
                   child: Text(
@@ -37,19 +41,27 @@ class Ages extends StatelessWidget {
 
   Widget _ages(List<QueryDocumentSnapshot<Map<String, dynamic>>> ages) {
     return ListView.separated(
+      padding: const EdgeInsets.all(24.0),
       itemCount: ages.length,
       itemBuilder: (context, index) {
         return Center(
-          child: Text(
-            ages[index].data()['value'],
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: Colors.black),
+          child: GestureDetector(
+            onTap: ()
+            {
+              context.read<AgeSelectionCubit>().selectAge(ages[index].data()['value']);
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              ages[index].data()['value'],
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                  ),
+            ),
           ),
         );
       },
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      separatorBuilder: (context, index) => const SizedBox(height: 24),
     );
   }
 }
