@@ -8,18 +8,31 @@ import 'package:flutter/material.dart';
 
 import '../../../common/widgets/button/basic_app_button.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+
+  //Added controllers, convertered to stateful class, added dispose method
+  final TextEditingController _nameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppbar(),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 16,
-        ),
+        horizontal: 20,
+        vertical: 16,
+      ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -80,6 +93,7 @@ class RegisterPage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextField(
+            controller: _nameController,
             textCapitalization: TextCapitalization.none,
             keyboardType: TextInputType.name,
             style: Theme.of(context)
@@ -115,6 +129,7 @@ class RegisterPage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextField(
+            controller: _emailController,
             textCapitalization: TextCapitalization.none,
             keyboardType: TextInputType.emailAddress,
             style: Theme.of(context)
@@ -150,6 +165,7 @@ class RegisterPage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextField(
+            controller: _passwordController,
             textCapitalization: TextCapitalization.none,
             keyboardType: TextInputType.visiblePassword,
             style: Theme.of(context)
@@ -174,7 +190,14 @@ class RegisterPage extends StatelessWidget {
   Widget _continueButton(BuildContext context) {
     return BasicAppButton(
       onPressed: () {
-        AppNavigator.push(context, GenderAndAgePage(newUserRequest: NewUserRequest(name: '', email: '', password:''),)); //TODO fill with varibales.
+        AppNavigator.push(
+            context,
+            GenderAndAgePage(
+              newUserRequest: NewUserRequest(
+                  name: _nameController.text,
+                  email: _emailController.text,
+                  password: _passwordController.text),
+            )); //TODO fill with varibales.
       },
       title: 'Continue',
     );
@@ -205,5 +228,13 @@ class RegisterPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
