@@ -25,7 +25,8 @@ class BasicReactiveButton extends StatelessWidget {
               context,
               const CircularProgressIndicator(
                 color: Colors.white,
-              ));
+              ),
+              true);
         }
         if (state is ButtonSuccessState) {
           return button(
@@ -34,7 +35,8 @@ class BasicReactiveButton extends StatelessWidget {
                 Icons.done_outlined,
                 size: 24,
                 color: Colors.white,
-              ));
+              ),
+              true);
         }
         if (state is ButtonFailureState) {
           return button(
@@ -43,7 +45,8 @@ class BasicReactiveButton extends StatelessWidget {
                 Icons.highlight_remove,
                 size: 24,
                 color: Colors.white,
-              ));
+              ),
+              true);
         }
 
         return button(
@@ -51,14 +54,16 @@ class BasicReactiveButton extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.bodyLarge,
-            ));
+            ),
+            false);
       },
     );
   }
 
-  Widget button(BuildContext context, Widget mainContent) {
+  Widget button(
+      BuildContext context, Widget mainContent, bool isButtonPressed) {
     return FilledButton(
-        onPressed: onPressed,
+        onPressed: isButtonPressed ? null : onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
           minimumSize:
