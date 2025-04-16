@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/common/bloc/button/button_state.dart';
 import 'package:ecommerce_app/common/bloc/button/button_state_cubit.dart';
 import 'package:ecommerce_app/common/helper/bottomsheet/app_bottomsheet.dart';
 import 'package:ecommerce_app/common/widgets/appbar/app_bar.dart';
@@ -27,29 +28,41 @@ class GenderAndAgePage extends StatelessWidget {
             BlocProvider(create: (context) => AgesDisplayCubit()),
             BlocProvider(create: (context) => ButtonStateCubit()),
           ],
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _heading(context),
-                      SizedBox(height: 28),
-                      _genderSection(context),
-                      SizedBox(height: 28),
-                      _ageSection(context),
-                    ],
+          child: BlocListener<ButtonStateCubit, ButtonState>(
+            listener: (context, state) {
+              if (state is ButtonFailureState) {
+                var snackBar = SnackBar(
+                  content: Text(state.errorMessage),
+                  behavior: SnackBarBehavior.floating,
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _heading(context),
+                        SizedBox(height: 28),
+                        _genderSection(context),
+                        SizedBox(height: 28),
+                        _ageSection(context),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              _submitButton(context),
-            ],
+                const Spacer(),
+                _submitButton(context),
+              ],
+            ),
           ),
         ));
   }
@@ -197,20 +210,20 @@ class GenderAndAgePage extends StatelessWidget {
               topRight: Radius.circular(38),
             )),
         child: Center(
-          child: Builder(
-            builder: (context) {
-              return BasicReactiveButton(
-                onPressed: () {
-                  newUserRequest.gender = context.read<GenderSelectionCubit>().selectedIndex;
-                  newUserRequest.age = context.read<AgeSelectionCubit>().selectedAge;
-                  context
-                      .read<ButtonStateCubit>()
-                      .execute(newUserRequest, SignupUsecase());
-                },
-                title: 'Submit',
-              );
-            }
-          ),
+          child: Builder(builder: (context) {
+            return BasicReactiveButton(
+              onPressed: () {
+                newUserRequest.gender =
+                    context.read<GenderSelectionCubit>().selectedIndex;
+                newUserRequest.age =
+                    context.read<AgeSelectionCubit>().selectedAge;
+                context
+                    .read<ButtonStateCubit>()
+                    .execute(newUserRequest, SignupUsecase());
+              },
+              title: 'Submit',
+            );
+          }),
         ));
   }
 }
