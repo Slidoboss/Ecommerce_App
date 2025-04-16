@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/data/auth/models/new_user_request.dart';
+import 'package:ecommerce_app/data/auth/models/user_signin_request.dart';
 import 'package:ecommerce_app/data/auth/source/auth_firebase_service.dart';
 import 'package:ecommerce_app/domain/auth/repository/auth.dart';
 import 'package:ecommerce_app/service_locator.dart';
@@ -13,5 +14,11 @@ class AuthRepositoryImplementation extends AuthRepository {
   @override
   Future<Either> getAges() async {
     return await getIt<AuthFirebaseService>().getAges();
+  }
+  
+  @override
+  Future<Either> signIn(UserSignInRequest user) async {
+    // TODO: implement signIn
+    throw UnimplementedError();
   }
 }
