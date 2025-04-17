@@ -19,4 +19,9 @@ class ButtonStateCubit extends Cubit<ButtonState> {
       emit(ButtonFailureState(errorMessage: e.toString()));
     }
   }
+
+  Future<void> reset() async {
+    Future.delayed(Duration(seconds: 1));
+    emit(ButtonIntialState());
+  }
 }
