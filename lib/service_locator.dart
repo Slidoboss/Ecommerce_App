@@ -3,6 +3,7 @@ import 'package:ecommerce_app/data/auth/repository/auth_repository_implementatio
 import 'package:ecommerce_app/data/auth/source/auth_firebase_service.dart';
 import 'package:ecommerce_app/domain/auth/repository/auth.dart';
 import 'package:ecommerce_app/domain/auth/usecases/get_ages.dart';
+import 'package:ecommerce_app/domain/auth/usecases/signin.dart';
 import 'package:ecommerce_app/domain/auth/usecases/signup.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,8 +20,7 @@ Future<void> initializeDependencies() async {
       messagingSenderId: dotenv.env['MESSAGING_SENDER_ID']!,
       projectId: dotenv.env['PROJECT_ID']!,
       storageBucket: dotenv.env['STORAGE_BUCKET']!,
-      iosBundleId: dotenv.env['IOS_BUNDLE_ID']!
-      ));
+      iosBundleId: dotenv.env['IOS_BUNDLE_ID']!));
 
   //Services
   getIt.registerSingleton<AuthFirebaseService>(
@@ -32,4 +32,5 @@ Future<void> initializeDependencies() async {
   //UseCase
   getIt.registerSingleton<SignupUsecase>(SignupUsecase());
   getIt.registerSingleton<GetAgesUseCase>(GetAgesUseCase());
+  getIt.registerSingleton<SignInUsecase>(SignInUsecase());
 }

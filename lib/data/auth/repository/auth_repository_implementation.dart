@@ -18,7 +18,6 @@ class AuthRepositoryImplementation extends AuthRepository {
   
   @override
   Future<Either> signIn(UserSignInRequest user) async {
-    // TODO: implement signIn
-    throw UnimplementedError();
+    return await getIt<AuthFirebaseService>().signIn(user);
   }
 }
