@@ -35,7 +35,6 @@ class GenderAndAgePage extends StatelessWidget {
                   content: Text(state.errorMessage),
                   behavior: SnackBarBehavior.floating,
                 );
-
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
